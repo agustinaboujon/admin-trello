@@ -16,6 +16,7 @@ public class ServiceCardImpl implements ServiceCard {
 
     @Override
     public String createCard(Card card) {
-        return trelloRepository.getBoard().toString();
+        String resp = trelloRepository.getBoard().getBody().toString();
+        return resp;
     }
 }

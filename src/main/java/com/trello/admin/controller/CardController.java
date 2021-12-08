@@ -4,15 +4,15 @@ import com.trello.admin.entity.Card;
 import com.trello.admin.service.ServiceCard;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Controller
-@RequestMapping(path = "/")
+@RestController
+@RequestMapping(path = "/api/trello")
 public class CardController {
 
     @Autowired
@@ -24,11 +24,12 @@ public class CardController {
         return serviceCard.createCard(card);
     }
 
-    @GetMapping
-    public String getBoard(){
-        log.info("creating a new card: {} in board");
+    @GetMapping(path = "/board")
+    public Card getBoard(){
         Card card = new Card();
-        return serviceCard.createCard(card);
+        String resp = serviceCard.createCard(card);
+        log.info("creating a new card: {} in board", resp);
+        return card;
     }
 
 }

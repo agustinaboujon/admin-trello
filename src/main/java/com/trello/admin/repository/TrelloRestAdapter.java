@@ -23,7 +23,7 @@ public class TrelloRestAdapter implements TrelloRepository {
     @Override
     public ResponseEntity getBoard() {
 
-        ResponseEntity resp = restTemplate.getForEntity(uri, Card.class);
+        ResponseEntity resp = restTemplate.getForEntity(uri, Object.class);
 
         return resp;
     }
