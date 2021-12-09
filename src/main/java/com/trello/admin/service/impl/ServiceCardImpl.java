@@ -15,8 +15,32 @@ public class ServiceCardImpl implements ServiceCard {
     TrelloRepository trelloRepository;
 
     @Override
-    public String createCard(Card card) {
+    public Object createCard(Card card) {
+        String params = buildParams(card);
+        return  trelloRepository.createCard(params);
+    }
+
+    @Override
+    public String getBoard() {
         String resp = trelloRepository.getBoard().getBody().toString();
         return resp;
+    }
+
+
+    private String buildParams(Card card) {
+
+        String params = "";
+
+        if(card.getTitle() != null && card.getDescription() != null){
+            params = "&name=" + card.getTitle() + "&desc=" + card.getDescription();
+        }else if(card.getDescription() != null && card.getTitle().isEmpty()){
+            //TODO: add random member and a "BUG" label
+
+            params = "&desc=" + card.getDescription() + "&title=randomtitle";
+        }else if(card.getTitle() != null && card.getLabel() != null){
+            //TODO: add labels
+            params = "&name=" + card.getTitle();
+        }
+        return params;
     }
 }

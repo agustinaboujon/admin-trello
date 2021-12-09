@@ -1,8 +1,9 @@
 package com.trello.admin.repository;
 
+import com.trello.admin.entity.Card;
 import org.springframework.http.ResponseEntity;
 
 public interface TrelloRepository {
-    ResponseEntity createCard();
+    Object createCard(String params);
     ResponseEntity getBoard();
 }

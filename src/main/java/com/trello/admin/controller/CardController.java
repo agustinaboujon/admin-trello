@@ -19,17 +19,15 @@ public class CardController {
     ServiceCard serviceCard;
 
     @PostMapping
-    public String createCard(@RequestBody Card card){
+    public Object createCard(@RequestBody Card card){
         log.info("creating a new card: {} in board", card);
         return serviceCard.createCard(card);
     }
 
     @GetMapping(path = "/board")
-    public Card getBoard(){
-        Card card = new Card();
-        String resp = serviceCard.createCard(card);
-        log.info("creating a new card: {} in board", resp);
-        return card;
+    public String getBoard(){
+        String resp = serviceCard.getBoard();
+        return resp;
     }
 
 }
