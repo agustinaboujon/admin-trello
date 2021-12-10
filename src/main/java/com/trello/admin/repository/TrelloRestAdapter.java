@@ -42,7 +42,7 @@ public class TrelloRestAdapter implements TrelloRepository {
 
     @Override
     public Card createCard(String params) {
-        log.info("building path for create a new card");
+        log.info("building path to create a new card");
         String createCardPath = CARD_PATH
                 + "?key=" + key
                 + "&token=" + token;
@@ -58,7 +58,7 @@ public class TrelloRestAdapter implements TrelloRepository {
 
     @Override
     public List<Membership> getMembersBoard() {
-        log.info("building path for get current members list");
+        log.info("building path to get current members list");
         String getMembersBoardPath = BOARD_PATH
                 + "/" + idBoard
                 + MEMBER_PATH
@@ -74,7 +74,7 @@ public class TrelloRestAdapter implements TrelloRepository {
 
     @Override
     public List<Label> getLabelList() {
-        log.info("building path for get labels list");
+        log.info("building path to get labels list");
         String getLabelPath = BOARD_PATH + "/"
                 + idBoard + LABEL_PATH
                 + "?key=" + key
