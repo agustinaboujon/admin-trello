@@ -1,21 +1,29 @@
 package com.trello.admin.repository;
 
 
-import com.trello.admin.OperationPaths;
+import com.trello.admin.entity.Card;
+import com.trello.admin.entity.Label;
+import com.trello.admin.entity.Membership;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
 
+import static com.trello.admin.OperationPaths.BOARD_PATH;
+import static com.trello.admin.OperationPaths.CARD_PATH;
+import static com.trello.admin.OperationPaths.LABEL_PATH;
+import static com.trello.admin.OperationPaths.MEMBER_PATH;
+import static com.trello.admin.OperationPaths.TRELLO_PATH;
+
+
+@Slf4j
 @Component
 public class TrelloRestAdapter implements TrelloRepository {
-
-    @Value("${trello.uri}")
-    private String uri;
 
     @Value("${trello.key}")
     private String key;
@@ -23,31 +31,60 @@ public class TrelloRestAdapter implements TrelloRepository {
     @Value("${trello.token}")
     private String token;
 
+    @Value("${trello.board.id}")
+    private String idBoard;
+
     @Value("${trello.list.id}")
     private String list;
-
-    //String uri = "https://api.trello.com/1/members/me/boards?key=689159bd0e318b3c0fd313fe057d0527&token=9ae2b24361ab04d8209b6657f2474efc445700c0be6349026215ce19506f33b9";
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public Object createCard(String params) {
-        String createCardPath = OperationPaths.CARD_PATH + "?key=" + key + "&token=" + token;
+    public Card createCard(String params) {
+        log.info("building path for create a new card");
+        String createCardPath = CARD_PATH
+                + "?key=" + key
+                + "&token=" + token;
         String idList = "&idList=" + list;
 
-        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
-        Object resp = restTemplate.postForEntity(uri + createCardPath + params + idList, parts, String.class);
+        log.info("path created: {}", TRELLO_PATH + createCardPath + params + idList);
+        ResponseEntity<Card> resp = restTemplate.postForEntity(TRELLO_PATH + createCardPath + params + idList, null, Card.class);
 
-        return resp;
+        log.info("card response: {}", resp.getBody());
+        return resp.getBody();
+
     }
 
     @Override
-    public ResponseEntity getBoard() {
+    public List<Membership> getMembersBoard() {
+        log.info("building path for get current members list");
+        String getMembersBoardPath = BOARD_PATH
+                + "/" + idBoard
+                + MEMBER_PATH
+                + "?key=" + key
+                + "&token=" + token;
 
-        ResponseEntity resp = restTemplate.getForEntity(uri, Object.class);
+        log.info("path created: {}", TRELLO_PATH + getMembersBoardPath);
+        ResponseEntity<Membership[]> resp = restTemplate.getForEntity(TRELLO_PATH + getMembersBoardPath, Membership[].class);
 
-        return resp;
+        log.info("members list response: {}", resp);
+        return Arrays.asList(resp.getBody());
+    }
+
+    @Override
+    public List<Label> getLabelList() {
+        log.info("building path for get labels list");
+        String getLabelPath = BOARD_PATH + "/"
+                + idBoard + LABEL_PATH
+                + "?key=" + key
+                + "&token=" + token;
+
+        log.info("path created: {}", TRELLO_PATH + getLabelPath);
+        ResponseEntity<Label[]> resp = restTemplate.getForEntity(TRELLO_PATH + getLabelPath, Label[].class);
+
+        log.info("board response: {}", resp.getBody());
+        return Arrays.asList(resp.getBody());
     }
 
 }

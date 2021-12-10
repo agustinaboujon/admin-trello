@@ -5,6 +5,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface ServiceCard {
-    Object createCard(Card card);
-    String getBoard();
+    Card createCard(Card card);
 }

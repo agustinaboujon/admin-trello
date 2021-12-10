@@ -1,17 +1,16 @@
 package com.trello.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 @Data
+@JsonIgnoreProperties
 public class Card {
     private String id;
-    @Nullable
     private String title;
-    @Nullable
     private String description;
     private String list;
     private String member;
-    @Nullable
-    private String label;
+    private String category;
+    private String type;
 }
